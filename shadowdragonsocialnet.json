@@ -1,0 +1,489 @@
+{
+    "appid": "d010f663-1d7d-499d-bc16-2de7724942c7",
+    "name": "ShadowDragon SocialNet",
+    "description": "This app integrates with SocialNet to provide investigative actions",
+    "type": "ticketing",
+    "product_vendor": "ShadowDragon",
+    "logo": "logo_shadowdragon.svg",
+    "logo_dark": "logo_shadowdragon_dark.svg",
+    "product_name": "SocialNet",
+    "product_version_regex": ".*",
+    "publisher": "Phantom",
+    "license": "Copyright (c) Phantom Cyber Corporation, 2018",
+    "app_version": "1.0.4",
+    "utctime_updated": "2018-01-10T00:13:04.000000Z",
+    "package_name": "phantom_shadowdragonsocialnet",
+    "main_module": "shadowdragonsocialnet_connector.pyc",
+    "min_phantom_version": "3.0.251",
+    "app_wizard_version": "1.0.1",
+    "configuration": {
+        "api_key": {
+            "description": "API key for SocialNet",
+            "data_type": "password",
+            "required": true,
+            "order": 0
+        }
+    },
+    "actions": [
+        {
+            "action": "test connectivity",
+            "identifier": "test_connectivity",
+            "description": "Validate the asset configuration for connectivity using supplied configuration",
+            "verbose": "",
+            "type": "test",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "run query",
+            "identifier": "run_query",
+            "description": "Run a query against SocialNet",
+            "verbose": "Either an <b>id</b> or a combination of <b>parameter_type</b> and <b>parameter_value</b> must be supplied for the action to run.  The endpoint can and should include the placeholder for <b>id</b> substitution as {id} - for example: /twitter/users/{id}/followers or /instagram/posts/{id}/likers",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "endpoint": {
+                    "description": "API endpoint to query (e.g. /facebook/users/{id}/photos)",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": false,
+                    "default": "/search",
+                    "order": 0
+                },
+                "id": {
+                    "description": "ID of entity to query",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": true,
+                    "contains": [
+                        "socialnet entity id"
+                    ],
+                    "order": 1
+                },
+                "parameter_type": {
+                    "description": "Type of parameter",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "value_list": [
+                        "email",
+                        "alias",
+                        "phone",
+                        "name",
+                        "q"
+                    ],
+                    "order": 2
+                },
+                "parameter_value": {
+                    "description": "Value for parameter to search",
+                    "data_type": "string",
+                    "required": false,
+                    "primary": false,
+                    "order": 3
+                },
+                "limit": {
+                    "description": "Number of query results to return (max 10000)",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "default": "25",
+                    "order": 4
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.endpoint",
+                    "data_type": "string",
+                    "column_name": "endpoint",
+                    "column_order": 4,
+                    "example_values": [
+                        "/facebook/search/users"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.id",
+                    "data_type": "string",
+                    "contains": [
+                        "socialnet entity id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.parameter_type",
+                    "data_type": "string",
+                    "example_values": [
+                        "name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.parameter_value",
+                    "data_type": "string",
+                    "example_values": [
+                        "Herman Edwards"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "example_values": [
+                        "success"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Total results: 2, Result found: True"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string",
+                    "column_name": "URL",
+                    "column_order": 3,
+                    "example_values": [
+                        "https://www.example.com/profile.php?id=1000236787961ba14/a/"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.avatar_url",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://example.com/v/t1a.a0a-a1/c22.0.74.74/p74x74/1379841_10150004552801901_469209496895221757_n.jpg?oh=7e2b0ecfb2d63805d09ebb7bcf597d4df1&oe=5AC32427"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "column_name": "Type",
+                    "column_order": 0,
+                    "example_values": [
+                        "user"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "ID",
+                    "column_order": 2,
+                    "example_values": [
+                        "100023678796114"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Name",
+                    "column_order": 1,
+                    "example_values": [
+                        "Herman Edwards"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_results",
+                    "data_type": "numeric",
+                    "example_values": [
+                        2
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.result_found",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "lookup email",
+            "identifier": "hunt_email",
+            "description": "Lookup an email in SocialNet",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "email": {
+                    "description": "Email address to hunt for social network accounts",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "email"
+                    ],
+                    "order": 0
+                },
+                "limit": {
+                    "description": "Number of query results to return (max 10000)",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "default": "25",
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.parameter.email",
+                    "data_type": "string",
+                    "contains": [
+                        "email"
+                    ],
+                    "column_name": "email",
+                    "column_order": 0,
+                    "example_values": [
+                        "herman@example.com"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Total results: 5"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://www.example.com/ga/prosfilea/A2TDLH6MaMGOR65"
+                    ],
+                    "contains": [
+                        "url"
+                    ],
+                    "column_name": "Entity Url",
+                    "column_order": 5
+                },
+                {
+                    "data_path": "action_result.data.*.social_site_name",
+                    "data_type": "string",
+                    "example_values": [
+                        "amazon"
+                    ],
+                    "column_name": "Social Site Name",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "example_values": [
+                        "user"
+                    ],
+                    "column_name": "Type",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "A2TDLH6MMGOR65"
+                    ],
+                    "column_name": "ID",
+                    "column_order": 3,
+                    "contains": [
+                        "socialnet entity id"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "Herman Edwards"
+                    ],
+                    "column_name": "Name",
+                    "column_order": 4
+                },
+                {
+                    "data_path": "action_result.data.*.avatar_url",
+                    "data_type": "string",
+                    "example_values": [
+                        "https://example.com/-YSYnPA0P5Js/AAAAAsAAAAAI/AAAAAAAAAqE/0dfsaYYDkJA4/photos.jpaga?ssz=50"
+                    ],
+                    "column_name": "Avatar Url",
+                    "column_order": 6,
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.is_expired",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.created_at",
+                    "data_type": "string",
+                    "example_values": [
+                        "2007-01-10T12:19:03Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.about",
+                    "data_type": "string",
+                    "example_values": []
+                },
+                {
+                    "data_path": "action_result.data.*.links",
+                    "data_type": "string",
+                    "example_values": []
+                },
+                {
+                    "data_path": "action_result.data.*.location",
+                    "data_type": "string",
+                    "example_values": []
+                },
+                {
+                    "data_path": "action_result.data.*.is_disabled",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "Herman Edwards"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.created_at",
+                    "data_type": "string",
+                    "example_values": [
+                        "2007-01-10T12:19:03Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.is_disabled",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.email",
+                    "data_type": "string",
+                    "example_values": [
+                        "herman@example.com"
+                    ],
+                    "contains": [
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.is_revoked",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.is_expired",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "Herman Edwards <herman@example.com>"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.public_key_algorithm",
+                    "data_type": "numeric",
+                    "example_values": [
+                        17
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.bits",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1024
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.is_revoked",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_results",
+                    "data_type": "string",
+                    "example_values": [
+                        "5"
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        }
+    ]
+}
