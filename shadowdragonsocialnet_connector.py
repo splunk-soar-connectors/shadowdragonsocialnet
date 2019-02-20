@@ -1,7 +1,7 @@
 # --
 # File: shadowdragonsocialnet_connector.py
 #
-# Copyright (c) Phantom Cyber Corporation, 2018
+# Copyright (c) Phantom Cyber Corporation, 2018-2019
 #
 # This unpublished material is proprietary to Phantom Cyber.
 # All rights reserved. The methods and
@@ -146,8 +146,9 @@ class ShadowdragonSocialNetConnector(BaseConnector):
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress("Connecting to example endpoint for testing connectivity")
+        url_params = {'email': 'test@test.com', 'name': 'test', 'limit': 1}
         # make rest call
-        ret_val, response = self._make_rest_call('/amazon/search?email=test@test.com&limit=1', action_result, params=None, headers=None)
+        ret_val, response = self._make_rest_call('/amazon/search', action_result, params=url_params, headers=None)
 
         if (phantom.is_fail(ret_val)):
             self.save_progress("Test Connectivity Failed.")
@@ -167,6 +168,9 @@ class ShadowdragonSocialNetConnector(BaseConnector):
         parameter_type = param.get('parameter_type', None)
         parameter_value = param.get('parameter_value', None)
         limit = param.get('limit', 25)
+
+        if not str(limit).isdigit():
+            return action_result.set_status(phantom.APP_ERROR, 'Invalid limit value. Please enter a valid positive integer')
 
         if entity_id and '{id}' not in endpoint:
             return action_result.set_status(phantom.APP_ERROR,
@@ -205,6 +209,9 @@ class ShadowdragonSocialNetConnector(BaseConnector):
         email = param['email']
         limit = param.get('limit', 25)
         url_params = {"email": email, "limit": limit}
+
+        if not str(limit).isdigit():
+            return action_result.set_status(phantom.APP_ERROR, 'Invalid limit value. Please enter a valid positive integer')
 
         # make rest call
         ret_val, response = self._make_rest_call('/search', action_result, params=url_params, headers=None)

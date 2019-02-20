@@ -9,12 +9,12 @@
     "product_name": "SocialNet",
     "product_version_regex": ".*",
     "publisher": "Phantom",
-    "license": "Copyright (c) Phantom Cyber Corporation, 2018",
+    "license": "Copyright (c) Phantom Cyber Corporation, 2018-2019",
     "app_version": "1.0.4",
     "utctime_updated": "2018-01-10T00:13:04.000000Z",
     "package_name": "phantom_shadowdragonsocialnet",
     "main_module": "shadowdragonsocialnet_connector.pyc",
-    "min_phantom_version": "3.0.251",
+    "min_phantom_version": "4.0.1068",
     "app_wizard_version": "1.0.1",
     "configuration": {
         "api_key": {
@@ -40,7 +40,7 @@
             "action": "run query",
             "identifier": "run_query",
             "description": "Run a query against SocialNet",
-            "verbose": "Either an <b>id</b> or a combination of <b>parameter_type</b> and <b>parameter_value</b> must be supplied for the action to run.  The endpoint can and should include the placeholder for <b>id</b> substitution as {id} - for example: /twitter/users/{id}/followers or /instagram/posts/{id}/likers",
+            "verbose": "Either an <b>id</b> or a combination of <b>parameter_type</b> and <b>parameter_value</b> must be supplied for the action to run.  The endpoint can and should include the placeholder for <b>id</b> substitution as {id} - for example: /twitter/users/{id}/followers or /instagram/posts/{id}/likers. <br>Limit is the maximum boundary for the results returned for each socialnet site and not the total results cumulative of all the sites. Maximum results (limit) for each socialnet site are 10000.",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -229,7 +229,7 @@
             "action": "lookup email",
             "identifier": "hunt_email",
             "description": "Lookup an email in SocialNet",
-            "verbose": "",
+            "verbose": "Limit is the maximum boundary for the results returned for each socialnet site and not the total results cumulative of all the sites. Maximum results (limit) for each socialnet site are 10000.",
             "type": "investigate",
             "read_only": true,
             "parameters": {
