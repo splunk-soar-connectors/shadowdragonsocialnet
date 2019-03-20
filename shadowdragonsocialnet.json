@@ -238,7 +238,7 @@
                         "email"
                     ],
                     "example_values": [
-                        "gar@askgar.com"
+                        "test@test.com"
                     ]
                 },
                 {
@@ -311,7 +311,7 @@
                     "column_name": "name",
                     "column_order": 4,
                     "example_values": [
-                        "Gary Warner"
+                        "Test Name"
                     ]
                 },
                 {
@@ -362,7 +362,7 @@
                     "data_path": "action_result.data.*.user_ids.*.email",
                     "data_type": "string",
                     "example_values": [
-                        "gar@askgar.com"
+                        "test@test.com"
                     ],
                     "contains": [
                         "email"
@@ -372,7 +372,7 @@
                     "data_path": "action_result.data.*.user_ids.*.id",
                     "data_type": "string",
                     "example_values": [
-                        "Gary Warner (2007Key) <gar@askgar.com>"
+                        "Test Name (2007Key) <test@test.com>"
                     ]
                 },
                 {
@@ -403,14 +403,14 @@
                     "data_path": "action_result.data.*.user_ids.*.name",
                     "data_type": "string",
                     "example_values": [
-                        "Gary Warner (2007Key)"
+                        "Test Name (2007Key)"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.username",
                     "data_type": "string",
                     "example_values": [
-                        "garwarner"
+                        "testName"
                     ],
                     "contains": [
                         "user name"
@@ -530,7 +530,7 @@
                     "column_name": "name",
                     "column_order": 4,
                     "example_values": [
-                        "Amy Schaibly Sweet (Schaibly)"
+                        "Test Name"
                     ]
                 },
                 {
@@ -745,7 +745,7 @@
                     "data_path": "action_result.data.*.text",
                     "data_type": "string",
                     "example_values": [
-                        "Dec 27, 2017 ... Beat special report on Test Name, test, \u201cfake news\u201d and how Rodrigo \nDuterte deployed the \u201cPutin playbook\u201d using the platform. Test's message for \nTest Name: \u201cWorking with anyone and everyone to make money is not \ngood for democracy.\u201d"
+                        "Sample Test Text"
                     ]
                 },
                 {
@@ -835,7 +835,7 @@
                     "data_path": "action_result.data.*.username",
                     "data_type": "string",
                     "example_values": [
-                        "live:fbheaddepartment"
+                        "live:testheaddepartment"
                     ],
                     "contains": [
                         "user name"
@@ -925,7 +925,7 @@
                         "phrase"
                     ],
                     "example_values": [
-                        "people who live in New York City"
+                        "people who live in Test City"
                     ]
                 },
                 {
@@ -934,7 +934,7 @@
                     "column_name": "avatar url",
                     "column_order": 6,
                     "example_values": [
-                        "//tvax3.sinaimg.cn/crop.0.8.2048.2048.180/6b150f49ly8fnm1fwjon8j21kw1l5k26.jpg"
+                        "//tvax3.testimg.cn/crop.0.8.2048.2048.180/6b150f49ly8fnm1fwjon8j21kw1l5k26.jpg"
                     ],
                     "contains": [
                         "url"
@@ -955,7 +955,7 @@
                     "column_name": "name",
                     "column_order": 4,
                     "example_values": [
-                        "DUMBO\u6566\u73c0"
+                        "DEMO\u6566\u73c0"
                     ]
                 },
                 {
@@ -964,21 +964,21 @@
                     "column_name": "social site name",
                     "column_order": 1,
                     "example_values": [
-                        "weibo"
+                        "TestSite"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.text",
                     "data_type": "string",
                     "example_values": [
-                        "May 21, 2009 ... Answer 1 of 147: There's a poll on this other website I go on, so I was curious to \nsee what people thought on this forum. On the other forum, about 80% say they \naren't jealous. So what's your verdict? And it would be interesting to see why or \nwhy you..."
+                        "Sample Test Text"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.title",
                     "data_type": "string",
                     "example_values": [
-                        "Are you jealous of people who live in NYC? - New York City Forum ..."
+                        "Test Title"
                     ]
                 },
                 {
@@ -996,7 +996,7 @@
                     "column_name": "entity url",
                     "column_order": 5,
                     "example_values": [
-                        "http://weibo.com/1796542281"
+                        "http://test.com/1796542281"
                     ],
                     "contains": [
                         "url"
