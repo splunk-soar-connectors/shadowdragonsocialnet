@@ -21,8 +21,6 @@
             "description": "API key for SocialNet",
             "data_type": "password",
             "required": true,
-            "value_list": [],
-            "default": "",
             "order": 0
         },
         "verify_server_cert": {
@@ -62,8 +60,6 @@
                         "user name",
                         "alias"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "limit": {
@@ -71,8 +67,6 @@
                     "data_type": "numeric",
                     "required": false,
                     "primary": false,
-                    "contains": [],
-                    "value_list": [],
                     "default": "25",
                     "order": 1
                 }
@@ -210,8 +204,6 @@
                     "contains": [
                         "email"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "limit": {
@@ -219,7 +211,6 @@
                     "data_type": "numeric",
                     "required": false,
                     "primary": false,
-                    "value_list": [],
                     "default": "25",
                     "order": 1
                 }
@@ -466,8 +457,6 @@
                     "contains": [
                         "phone"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "limit": {
@@ -475,8 +464,6 @@
                     "data_type": "numeric",
                     "required": false,
                     "primary": false,
-                    "contains": [],
-                    "value_list": [],
                     "default": "25",
                     "order": 1
                 }
@@ -613,7 +600,6 @@
                     "contains": [
                         "name"
                     ],
-                    "value_list": [],
                     "default": "",
                     "order": 0
                 },
@@ -622,8 +608,6 @@
                     "data_type": "numeric",
                     "required": false,
                     "primary": false,
-                    "contains": [],
-                    "value_list": [],
                     "default": "25",
                     "order": 1
                 }
@@ -891,8 +875,6 @@
                     "contains": [
                         "phrase"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "limit": {
@@ -900,8 +882,6 @@
                     "data_type": "numeric",
                     "required": false,
                     "primary": false,
-                    "contains": [],
-                    "value_list": [],
                     "default": "25",
                     "order": 1
                 }
