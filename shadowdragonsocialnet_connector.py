@@ -1,7 +1,7 @@
 # --
 # File: shadowdragonsocialnet_connector.py
 #
-# Copyright (c) Phantom Cyber Corporation, 2018-2019
+# Copyright (c) ShadowDragon, 2019
 #
 # This unpublished material is proprietary to Phantom Cyber.
 # All rights reserved. The methods and
@@ -29,12 +29,12 @@ class RetVal(tuple):
         return tuple.__new__(RetVal, (val1, val2))
 
 
-class ShadowdragonSocialNetConnector(BaseConnector):
+class ShadowdragonSocialnetConnector(BaseConnector):
 
     def __init__(self):
 
         # Call the BaseConnectors init first
-        super(ShadowdragonSocialNetConnector, self).__init__()
+        super(ShadowdragonSocialnetConnector, self).__init__()
 
         self._state = None
         self._base_url = "https://api.socialnet.shadowdragon.io"
@@ -135,6 +135,7 @@ class ShadowdragonSocialNetConnector(BaseConnector):
                             url,
                             json=data,
                             headers=headers,
+                            verify=config.get('verify_server_cert', False),
                             params=params)
         except Exception as e:
             return RetVal(action_result.set_status( phantom.APP_ERROR, "Error Connecting to server. Details: {0}".format(str(e))), resp_json)
@@ -145,65 +146,60 @@ class ShadowdragonSocialNetConnector(BaseConnector):
 
         # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
-        self.save_progress("Connecting to example endpoint for testing connectivity")
-        url_params = {'email': 'test@test.com', 'name': 'test', 'limit': 1}
+        self.save_progress("Connecting to / endpoint")
         # make rest call
-        ret_val, response = self._make_rest_call('/amazon/search', action_result, params=url_params, headers=None)
+        ret_val, response = self._make_rest_call('/', action_result, params=None, headers=None)
 
         if (phantom.is_fail(ret_val)):
-            self.save_progress("Test Connectivity Failed.")
+            self.save_progress("Test Connectivity Failed.Error: {0}".format(action_result.get_message()))
             return action_result.get_status()
 
         # Return success
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_run_query(self, param):
+    def _handle_hunt_alias(self, param):
 
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        endpoint = param['endpoint']
-        entity_id = param.get('id', None)
-        parameter_type = param.get('parameter_type', None)
-        parameter_value = param.get('parameter_value', None)
+        alias = param['alias']
         limit = param.get('limit', 25)
+        url_params = {"alias": alias, "limit": limit}
 
         if not str(limit).isdigit():
             return action_result.set_status(phantom.APP_ERROR, 'Invalid limit value. Please enter a valid positive integer')
 
-        if entity_id and '{id}' not in endpoint:
-            return action_result.set_status(phantom.APP_ERROR,
-                "id supplied with no substitution path in endpoint")
-        elif entity_id:
-            endpoint = endpoint.format(id = entity_id)  # noqa E251
-            url_params = {"limit": limit}
-        elif parameter_type and parameter_value:
-            url_params = {parameter_type: parameter_value, "limit": limit}
-        else:
-            return action_result.set_status(phantom.APP_ERROR,
-                "Action requires either id OR both parameter_type and parameter_value to be supplied")
         # make rest call
-        ret_val, response = self._make_rest_call(endpoint, action_result, params=url_params, headers=None)
+        ret_val, response = self._make_rest_call('/search', action_result, params=url_params, headers=None)
 
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
 
-        if (type(response) != list):
-            # convert to list
-            response = [response]
-
-        for curr_item in response:
-            action_result.add_data(curr_item)
+        # Reformat response
+        data = []
+        for search_result_type in response:
+            for each_result in response[search_result_type]:
+                each_result_dict = each_result
+                each_result_dict["social_site_name"] = str(search_result_type)
+                data.append(each_result_dict)
+                action_result.add_data(each_result_dict)
 
         summary = action_result.update_summary({})
-        summary.update({'result_found': True if response else False, 'total_results': len(response)})
+        try:
+            summary['total_results'] = str(len(data))
+        except:
+            summary['total_results'] = "0"
 
         return action_result.set_status(phantom.APP_SUCCESS)
 
     def _handle_hunt_email(self, param):
 
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         email = param['email']
@@ -212,6 +208,108 @@ class ShadowdragonSocialNetConnector(BaseConnector):
 
         if not str(limit).isdigit():
             return action_result.set_status(phantom.APP_ERROR, 'Invalid limit value. Please enter a valid positive integer')
+
+        # make rest call
+        ret_val, response = self._make_rest_call('/search', action_result, params=url_params, headers=None)
+
+        if (phantom.is_fail(ret_val)):
+            return action_result.get_status()
+
+        # Reformat response
+        data = []
+        for search_result_type in response:
+            for each_result in response[search_result_type]:
+                each_result_dict = each_result
+                each_result_dict["social_site_name"] = str(search_result_type)
+                data.append(each_result_dict)
+                action_result.add_data(each_result_dict)
+
+        summary = action_result.update_summary({})
+        try:
+            summary['total_results'] = str(len(data))
+        except:
+            summary['total_results'] = "0"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_hunt_phone(self, param):
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        phone = param['phone']
+        limit = param.get('limit', 25)
+        url_params = {"phone": phone, "limit": limit}
+
+        # make rest call
+        ret_val, response = self._make_rest_call('/search', action_result, params=url_params, headers=None)
+
+        if (phantom.is_fail(ret_val)):
+            return action_result.get_status()
+
+        # Reformat response
+        data = []
+        for search_result_type in response:
+            for each_result in response[search_result_type]:
+                each_result_dict = each_result
+                each_result_dict["social_site_name"] = str(search_result_type)
+                data.append(each_result_dict)
+                action_result.add_data(each_result_dict)
+
+        summary = action_result.update_summary({})
+        try:
+            summary['total_results'] = str(len(data))
+        except:
+            summary['total_results'] = "0"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_hunt_name(self, param):
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        name = param['name']
+        limit = param.get('limit', 25)
+        url_params = {"name": name, "limit": limit}
+
+        # make rest call
+        ret_val, response = self._make_rest_call('/search', action_result, params=url_params, headers=None)
+
+        if (phantom.is_fail(ret_val)):
+            return action_result.get_status()
+
+        # Reformat response
+        data = []
+        for search_result_type in response:
+            for each_result in response[search_result_type]:
+                each_result_dict = each_result
+                each_result_dict["social_site_name"] = str(search_result_type)
+                data.append(each_result_dict)
+                action_result.add_data(each_result_dict)
+
+        summary = action_result.update_summary({})
+        try:
+            summary['total_results'] = str(len(data))
+        except:
+            summary['total_results'] = "0"
+
+        return action_result.set_status(phantom.APP_SUCCESS)
+
+    def _handle_hunt_phrase(self, param):
+
+        self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
+
+        # Add an action result object to self (BaseConnector) to represent the action for this param
+        action_result = self.add_action_result(ActionResult(dict(param)))
+
+        phrase = param['phrase']
+        limit = param.get('limit', 25)
+        url_params = {"q": phrase, "limit": limit}
 
         # make rest call
         ret_val, response = self._make_rest_call('/search', action_result, params=url_params, headers=None)
@@ -248,11 +346,20 @@ class ShadowdragonSocialNetConnector(BaseConnector):
         if action_id == 'test_connectivity':
             ret_val = self._handle_test_connectivity(param)
 
-        elif action_id == 'run_query':
-            ret_val = self._handle_run_query(param)
+        elif action_id == 'hunt_alias':
+            ret_val = self._handle_hunt_alias(param)
 
         elif action_id == 'hunt_email':
             ret_val = self._handle_hunt_email(param)
+
+        elif action_id == 'hunt_phone':
+            ret_val = self._handle_hunt_phone(param)
+
+        elif action_id == 'hunt_name':
+            ret_val = self._handle_hunt_name(param)
+
+        elif action_id == 'hunt_phrase':
+            ret_val = self._handle_hunt_phrase(param)
 
         return ret_val
 
@@ -342,7 +449,7 @@ if __name__ == '__main__':
         in_json = json.loads(in_json)
         print(json.dumps(in_json, indent=4))
 
-        connector = ShadowdragonSocialNetConnector()
+        connector = ShadowdragonSocialnetConnector()
         connector.print_progress_message = True
 
         if (session_id is not None):
