@@ -21,8 +21,6 @@
             "description": "API key for SocialNet",
             "data_type": "password",
             "required": true,
-            "value_list": [],
-            "default": "",
             "order": 0
         },
         "verify_server_cert": {
@@ -38,7 +36,6 @@
             "action": "test connectivity",
             "identifier": "test_connectivity",
             "description": "Validate the asset configuration for connectivity using supplied configuration",
-            "verbose": "",
             "type": "test",
             "read_only": true,
             "parameters": {},
@@ -49,7 +46,6 @@
             "action": "hunt alias",
             "identifier": "hunt_alias",
             "description": "Hunt for an alias in SocialNet",
-            "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -62,8 +58,6 @@
                         "user name",
                         "alias"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "limit": {
@@ -71,9 +65,7 @@
                     "data_type": "numeric",
                     "required": false,
                     "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "25",
+                    "default": 25,
                     "order": 1
                 }
             },
@@ -97,8 +89,7 @@
                 },
                 {
                     "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric",
-                    "contains": []
+                    "data_type": "numeric"
                 },
                 {
                     "data_path": "action_result.data.*.avatar_url",
@@ -198,7 +189,7 @@
             "action": "hunt email",
             "identifier": "hunt_email",
             "description": "Hunt for an email address in SocialNet",
-            "verbose": "Limit is the maximum boundary for the results returned for each socialnet site and not the total results cumulative of all the sites. Maximum results (limit) for each socialnet site are 10000.",
+            "verbose": "Limit is the maximum boundary for the results returned for each socialnet site and not the total results cumulative of all the sites. Maximum results (limit) for each socialnet site are 10000",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -210,8 +201,6 @@
                     "contains": [
                         "email"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "limit": {
@@ -219,8 +208,7 @@
                     "data_type": "numeric",
                     "required": false,
                     "primary": false,
-                    "value_list": [],
-                    "default": "25",
+                    "default": 25,
                     "order": 1
                 }
             },
@@ -243,8 +231,7 @@
                 },
                 {
                     "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric",
-                    "contains": []
+                    "data_type": "numeric"
                 },
                 {
                     "data_path": "action_result.data.*.avatar_url",
@@ -454,7 +441,6 @@
             "action": "hunt phone",
             "identifier": "hunt_phone",
             "description": "Hunt for a phone number in SocialNet",
-            "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -466,8 +452,6 @@
                     "contains": [
                         "phone"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "limit": {
@@ -475,9 +459,7 @@
                     "data_type": "numeric",
                     "required": false,
                     "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "25",
+                    "default": 25,
                     "order": 1
                 }
             },
@@ -488,8 +470,7 @@
                 },
                 {
                     "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric",
-                    "contains": []
+                    "data_type": "numeric"
                 },
                 {
                     "data_path": "action_result.parameter.phone",
@@ -601,7 +582,6 @@
             "action": "hunt name",
             "identifier": "hunt_name",
             "description": "Hunt for a person's name in SocialNet",
-            "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -613,8 +593,6 @@
                     "contains": [
                         "name"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "limit": {
@@ -622,9 +600,7 @@
                     "data_type": "numeric",
                     "required": false,
                     "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "25",
+                    "default": 25,
                     "order": 1
                 }
             },
@@ -635,8 +611,7 @@
                 },
                 {
                     "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric",
-                    "contains": []
+                    "data_type": "numeric"
                 },
                 {
                     "data_path": "action_result.parameter.name",
@@ -879,7 +854,6 @@
             "action": "hunt phrase",
             "identifier": "hunt_phrase",
             "description": "Hunt for a phrase in SocialNet",
-            "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -891,8 +865,6 @@
                     "contains": [
                         "phrase"
                     ],
-                    "value_list": [],
-                    "default": "",
                     "order": 0
                 },
                 "limit": {
@@ -900,9 +872,7 @@
                     "data_type": "numeric",
                     "required": false,
                     "primary": false,
-                    "contains": [],
-                    "value_list": [],
-                    "default": "25",
+                    "default": 25,
                     "order": 1
                 }
             },
@@ -913,8 +883,7 @@
                 },
                 {
                     "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric",
-                    "contains": []
+                    "data_type": "numeric"
                 },
                 {
                     "data_path": "action_result.parameter.phrase",
