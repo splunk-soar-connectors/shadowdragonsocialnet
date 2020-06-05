@@ -1,27 +1,34 @@
 {
     "appid": "d010f663-1d7d-499d-bc16-2de7724942c7",
     "name": "ShadowDragon SocialNet",
-    "description": "This app integrates with SocialNet to provide investigative actions",
-    "type": "ticketing",
+    "description": "This app supports investigative actions on the SocialNet cloud investigation API",
+    "type": "devops",
     "product_vendor": "ShadowDragon",
     "logo": "logo_shadowdragon.svg",
     "logo_dark": "logo_shadowdragon_dark.svg",
     "product_name": "SocialNet",
     "product_version_regex": ".*",
-    "publisher": "Phantom",
-    "license": "Copyright (c) Phantom Cyber Corporation, 2018-2019",
-    "app_version": "1.0.5",
-    "utctime_updated": "2018-01-10T00:13:04.000000Z",
+    "publisher": "ShadowDragon",
+    "license": "Copyright (c) ShadowDragon, 2019",
+    "app_version": "1.2.0",
+    "utctime_updated": "2019-03-19T15:47:17.477544Z",
     "package_name": "phantom_shadowdragonsocialnet",
     "main_module": "shadowdragonsocialnet_connector.pyc",
     "min_phantom_version": "4.0.1068",
-    "app_wizard_version": "1.0.1",
+    "app_wizard_version": "1.0.0",
     "configuration": {
         "api_key": {
             "description": "API key for SocialNet",
             "data_type": "password",
             "required": true,
             "order": 0
+        },
+        "verify_server_cert": {
+            "description": "Verify remote server certificate",
+            "data_type": "boolean",
+            "required": true,
+            "default": true,
+            "order": 1
         }
     },
     "actions": [
@@ -37,51 +44,23 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "run query",
-            "identifier": "run_query",
-            "description": "Run a query against SocialNet",
-            "verbose": "Either an <b>id</b> or a combination of <b>parameter_type</b> and <b>parameter_value</b> must be supplied for the action to run.  The endpoint can and should include the placeholder for <b>id</b> substitution as {id} - for example: /twitter/users/{id}/followers or /instagram/posts/{id}/likers. <br>Limit is the maximum boundary for the results returned for each socialnet site and not the total results cumulative of all the sites. Maximum results (limit) for each socialnet site are 10000.",
+            "action": "hunt alias",
+            "identifier": "hunt_alias",
+            "description": "Hunt for an alias in SocialNet",
+            "verbose": "",
             "type": "investigate",
             "read_only": true,
             "parameters": {
-                "endpoint": {
-                    "description": "API endpoint to query (e.g. /facebook/users/{id}/photos)",
+                "alias": {
+                    "description": "Alias to hunt for social network accounts",
                     "data_type": "string",
                     "required": true,
-                    "primary": false,
-                    "default": "/search",
-                    "order": 0
-                },
-                "id": {
-                    "description": "ID of entity to query",
-                    "data_type": "string",
-                    "required": false,
                     "primary": true,
                     "contains": [
-                        "socialnet entity id"
+                        "user name",
+                        "alias"
                     ],
-                    "order": 1
-                },
-                "parameter_type": {
-                    "description": "Type of parameter",
-                    "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "value_list": [
-                        "email",
-                        "alias",
-                        "phone",
-                        "name",
-                        "q"
-                    ],
-                    "order": 2
-                },
-                "parameter_value": {
-                    "description": "Value for parameter to search",
-                    "data_type": "string",
-                    "required": false,
-                    "primary": false,
-                    "order": 3
+                    "order": 0
                 },
                 "limit": {
                     "description": "Number of query results to return (max 10000)",
@@ -89,56 +68,104 @@
                     "required": false,
                     "primary": false,
                     "default": "25",
-                    "order": 4
+                    "order": 1
                 }
             },
             "output": [
                 {
-                    "data_path": "action_result.parameter.endpoint",
-                    "data_type": "string",
-                    "column_name": "endpoint",
-                    "column_order": 4,
-                    "example_values": [
-                        "/facebook/search/users"
-                    ]
+                    "data_path": "action_result.status",
+                    "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.parameter.id",
+                    "data_path": "action_result.parameter.alias",
                     "data_type": "string",
+                    "column_name": "alias",
+                    "column_order": 0,
                     "contains": [
-                        "socialnet entity id"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.parameter_type",
-                    "data_type": "string",
+                        "user name",
+                        "alias"
+                    ],
                     "example_values": [
-                        "name"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.parameter_value",
-                    "data_type": "string",
-                    "example_values": [
-                        "Herman Edwards"
+                        "test"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric"
+                    "data_type": "numeric",
+                    "contains": []
                 },
                 {
-                    "data_path": "action_result.status",
+                    "data_path": "action_result.data.*.avatar_url",
+                    "data_type": "string",
+                    "column_name": "avatar url",
+                    "column_order": 6,
+                    "example_values": [
+                        "https://scontent-iad3-1.cdntest.com/t51.2885-19/s150x150/13739633_1648409658810275_999417478_a.jpg"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "id",
+                    "column_order": 3,
+                    "example_values": [
+                        "test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "name",
+                    "column_order": 4,
+                    "example_values": [
+                        "Test Name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.social_site_name",
+                    "data_type": "string",
+                    "column_name": "social site name",
+                    "column_order": 1,
+                    "example_values": [
+                        "test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "column_name": "type",
+                    "column_order": 2,
+                    "example_values": [
+                        "user"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string",
+                    "column_name": "entity url",
+                    "column_order": 5,
+                    "example_values": [
+                        "https://www.test.com/test"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_results",
                     "data_type": "string",
                     "example_values": [
-                        "success"
+                        "35"
                     ]
                 },
                 {
                     "data_path": "action_result.message",
                     "data_type": "string",
                     "example_values": [
-                        "Total results: 2, Result found: True"
+                        "Total results: 35"
                     ]
                 },
                 {
@@ -154,70 +181,6 @@
                     "example_values": [
                         1
                     ]
-                },
-                {
-                    "data_path": "action_result.data.*.url",
-                    "data_type": "string",
-                    "column_name": "URL",
-                    "column_order": 3,
-                    "example_values": [
-                        "https://www.example.com/profile.php?id=1000236787961ba14/a/"
-                    ],
-                    "contains": [
-                        "url"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.avatar_url",
-                    "data_type": "string",
-                    "example_values": [
-                        "https://example.com/v/t1a.a0a-a1/c22.0.74.74/p74x74/1379841_10150004552801901_469209496895221757_n.jpg?oh=7e2b0ecfb2d63805d09ebb7bcf597d4df1&oe=5AC32427"
-                    ],
-                    "contains": [
-                        "url"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.type",
-                    "data_type": "string",
-                    "column_name": "Type",
-                    "column_order": 0,
-                    "example_values": [
-                        "user"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.id",
-                    "data_type": "string",
-                    "column_name": "ID",
-                    "column_order": 2,
-                    "example_values": [
-                        "100023678796114"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string",
-                    "column_name": "Name",
-                    "column_order": 1,
-                    "example_values": [
-                        "Herman Edwards"
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.total_results",
-                    "data_type": "numeric",
-                    "example_values": [
-                        2
-                    ]
-                },
-                {
-                    "data_path": "action_result.summary.result_found",
-                    "data_type": "boolean",
-                    "example_values": [
-                        true,
-                        false
-                    ]
                 }
             ],
             "render": {
@@ -226,9 +189,9 @@
             "versions": "EQ(*)"
         },
         {
-            "action": "lookup email",
+            "action": "hunt email",
             "identifier": "hunt_email",
-            "description": "Lookup an email in SocialNet",
+            "description": "Hunt for an email address in SocialNet",
             "verbose": "Limit is the maximum boundary for the results returned for each socialnet site and not the total results cumulative of all the sites. Maximum results (limit) for each socialnet site are 10000.",
             "type": "investigate",
             "read_only": true,
@@ -254,107 +217,67 @@
             },
             "output": [
                 {
-                    "data_path": "action_result.parameter.email",
-                    "data_type": "string",
-                    "contains": [
-                        "email"
-                    ],
-                    "column_name": "email",
-                    "column_order": 0,
-                    "example_values": [
-                        "herman@example.com"
-                    ]
-                },
-                {
-                    "data_path": "action_result.parameter.limit",
-                    "data_type": "numeric"
-                },
-                {
                     "data_path": "action_result.status",
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.message",
+                    "data_path": "action_result.parameter.email",
                     "data_type": "string",
-                    "example_values": [
-                        "Total results: 5"
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "summary.total_objects_successful",
-                    "data_type": "numeric",
-                    "example_values": [
-                        1
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.url",
-                    "data_type": "string",
-                    "example_values": [
-                        "https://www.example.com/ga/prosfilea/A2TDLH6MaMGOR65"
-                    ],
+                    "column_name": "email",
+                    "column_order": 0,
                     "contains": [
-                        "url"
+                        "email"
                     ],
-                    "column_name": "Entity Url",
-                    "column_order": 5
-                },
-                {
-                    "data_path": "action_result.data.*.social_site_name",
-                    "data_type": "string",
                     "example_values": [
-                        "amazon"
-                    ],
-                    "column_name": "Social Site Name",
-                    "column_order": 1
-                },
-                {
-                    "data_path": "action_result.data.*.type",
-                    "data_type": "string",
-                    "example_values": [
-                        "user"
-                    ],
-                    "column_name": "Type",
-                    "column_order": 2
-                },
-                {
-                    "data_path": "action_result.data.*.id",
-                    "data_type": "string",
-                    "example_values": [
-                        "A2TDLH6MMGOR65"
-                    ],
-                    "column_name": "ID",
-                    "column_order": 3,
-                    "contains": [
-                        "socialnet entity id"
+                        "test@test.com"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.name",
-                    "data_type": "string",
-                    "example_values": [
-                        "Herman Edwards"
-                    ],
-                    "column_name": "Name",
-                    "column_order": 4
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric",
+                    "contains": []
                 },
                 {
                     "data_path": "action_result.data.*.avatar_url",
                     "data_type": "string",
-                    "example_values": [
-                        "https://example.com/-YSYnPA0P5Js/AAAAAsAAAAAI/AAAAAAAAAqE/0dfsaYYDkJA4/photos.jpaga?ssz=50"
-                    ],
-                    "column_name": "Avatar Url",
+                    "column_name": "avatar url",
                     "column_order": 6,
+                    "example_values": [
+                        "https://lh6.testusercontent.com/-YSYnPA0P5Js/AAAAAAAAAAI/AAAAAAAAAqE/0dfaYYDkJA4/photo.jpg?sz=50"
+                    ],
                     "contains": [
                         "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.bits",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1024
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.created_at",
+                    "data_type": "string",
+                    "example_values": [
+                        "2007-01-10T12:19:03Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "id",
+                    "column_order": 3,
+                    "example_values": [
+                        "102529841370924217218"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.is_disabled",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
                     ]
                 },
                 {
@@ -366,29 +289,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.created_at",
-                    "data_type": "string",
-                    "example_values": [
-                        "2007-01-10T12:19:03Z"
-                    ]
-                },
-                {
-                    "data_path": "action_result.data.*.about",
-                    "data_type": "string",
-                    "example_values": []
-                },
-                {
-                    "data_path": "action_result.data.*.links",
-                    "data_type": "string",
-                    "example_values": []
-                },
-                {
-                    "data_path": "action_result.data.*.location",
-                    "data_type": "string",
-                    "example_values": []
-                },
-                {
-                    "data_path": "action_result.data.*.is_disabled",
+                    "data_path": "action_result.data.*.is_revoked",
                     "data_type": "boolean",
                     "example_values": [
                         true,
@@ -396,10 +297,49 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.user_ids.*.name",
+                    "data_path": "action_result.data.*.name",
                     "data_type": "string",
+                    "column_name": "name",
+                    "column_order": 4,
                     "example_values": [
-                        "Herman Edwards"
+                        "Test Name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.public_key_algorithm",
+                    "data_type": "numeric",
+                    "example_values": [
+                        17
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.social_site_name",
+                    "data_type": "string",
+                    "column_name": "social site name",
+                    "column_order": 1,
+                    "example_values": [
+                        "testplus"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "column_name": "type",
+                    "column_order": 2,
+                    "example_values": [
+                        "user"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string",
+                    "column_name": "URL",
+                    "column_order": 3,
+                    "example_values": [
+                        "https://plus.test.com/102529841370924217218"
+                    ],
+                    "contains": [
+                        "url"
                     ]
                 },
                 {
@@ -410,25 +350,24 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.user_ids.*.is_disabled",
-                    "data_type": "boolean",
-                    "example_values": [
-                        true,
-                        false
-                    ]
-                },
-                {
                     "data_path": "action_result.data.*.user_ids.*.email",
                     "data_type": "string",
                     "example_values": [
-                        "herman@example.com"
+                        "test@test.com"
                     ],
                     "contains": [
                         "email"
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.user_ids.*.is_revoked",
+                    "data_path": "action_result.data.*.user_ids.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test Name (2007Key) <test@test.com>"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.is_disabled",
                     "data_type": "boolean",
                     "example_values": [
                         true,
@@ -444,24 +383,313 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.user_ids.*.id",
-                    "data_type": "string",
+                    "data_path": "action_result.data.*.user_ids.*.is_revoked",
+                    "data_type": "boolean",
                     "example_values": [
-                        "Herman Edwards <herman@example.com>"
+                        true,
+                        false
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.public_key_algorithm",
+                    "data_path": "action_result.data.*.user_ids.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test Name (2007Key)"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.username",
+                    "data_type": "string",
+                    "example_values": [
+                        "testName"
+                    ],
+                    "contains": [
+                        "user name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_results",
+                    "data_type": "string",
+                    "example_values": [
+                        "6"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Total results: 6"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
                     "data_type": "numeric",
                     "example_values": [
-                        17
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "hunt phone",
+            "identifier": "hunt_phone",
+            "description": "Hunt for a phone number in SocialNet",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "phone": {
+                    "description": "Phone number to hunt for social network accounts",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "phone"
+                    ],
+                    "order": 0
+                },
+                "limit": {
+                    "description": "Number of query results to return (max 10000)",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "default": "25",
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric",
+                    "contains": []
+                },
+                {
+                    "data_path": "action_result.parameter.phone",
+                    "data_type": "string",
+                    "column_name": "phone",
+                    "column_order": 0,
+                    "contains": [
+                        "phone"
+                    ],
+                    "example_values": [
+                        "(517) 881-6840"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.avatar_url",
+                    "data_type": "string",
+                    "column_name": "avatar url",
+                    "column_order": 6,
+                    "example_values": [
+                        "https://scontent-lax3-1.xx.fbcdn.net/v/t1.0-1/p74x74/26166500_10213980650407059_3710435795516336097_n.jpg?oh=dd7693d54edc092447f37efcc74ec1af&oe=5AEDB4FF"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "id",
+                    "column_order": 3,
+                    "example_values": [
+                        "1134300840"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "name",
+                    "column_order": 4,
+                    "example_values": [
+                        "Test Name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.social_site_name",
+                    "data_type": "string",
+                    "column_name": "social site name",
+                    "column_order": 1,
+                    "example_values": [
+                        "test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "column_name": "type",
+                    "column_order": 2,
+                    "example_values": [
+                        "user"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string",
+                    "column_name": "entity url",
+                    "column_order": 5,
+                    "example_values": [
+                        "https://www.test.com/profile.php?id=1134300840"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_results",
+                    "data_type": "string",
+                    "example_values": [
+                        "1"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Total results: 1"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "hunt name",
+            "identifier": "hunt_name",
+            "description": "Hunt for a person's name in SocialNet",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "name": {
+                    "description": "Name to hunt for social network accounts",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "name"
+                    ],
+                    "default": "",
+                    "order": 0
+                },
+                "limit": {
+                    "description": "Number of query results to return (max 10000)",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "default": "25",
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric",
+                    "contains": []
+                },
+                {
+                    "data_path": "action_result.parameter.name",
+                    "data_type": "string",
+                    "column_name": "name",
+                    "column_order": 0,
+                    "contains": [
+                        "name"
+                    ],
+                    "example_values": [
+                        "Test Name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.avatar_url",
+                    "data_type": "string",
+                    "column_name": "avatar url",
+                    "column_order": 6,
+                    "example_values": [
+                        "https://scontent-iad3-1.cdntest.com/t51.2885-19/s150x150/17438735_1887313411557782_2905658346268786688_a.jpg"
+                    ],
+                    "contains": [
+                        "url"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.bits",
                     "data_type": "numeric",
                     "example_values": [
-                        1024
+                        4096
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.created_at",
+                    "data_type": "string",
+                    "example_values": [
+                        "2017-08-30T06:00:31Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.expires_at",
+                    "data_type": "string",
+                    "example_values": [
+                        "2018-03-28T06:00:31Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "id",
+                    "column_order": 3,
+                    "example_values": [
+                        "aHR0cDovL3d3dy5tc25iYy5jb20vdGhlLWJlYXQtd2l0aC1hcmktbWVsYmVyL3dhdGNoL21hcmstenVja2VyYmVyZy11bmRlci1maXJlLWZvci1mYWNlYm9vay1zLWRlYWwtd2l0aC1hdXRob3JpdGFyaWFuLXJvZHJpZ28tZHV0ZXJ0ZS0xMTI1MDA4OTYzODg0"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.is_disabled",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.is_expired",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
                     ]
                 },
                 {
@@ -473,10 +701,313 @@
                     ]
                 },
                 {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "name",
+                    "column_order": 4,
+                    "example_values": [
+                        "Test Name"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.public_key_algorithm",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.social_site_name",
+                    "data_type": "string",
+                    "column_name": "social site name",
+                    "column_order": 1,
+                    "example_values": [
+                        "test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.text",
+                    "data_type": "string",
+                    "example_values": [
+                        "Sample Test Text"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test Name under fire for test's deal with... | TEST"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "column_name": "type",
+                    "column_order": 2,
+                    "example_values": [
+                        "test"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string",
+                    "column_name": "entity url",
+                    "column_order": 5,
+                    "example_values": [
+                        "http://www.test.com/the-beat-with-ari-test/watch/test-test-under-fire-for-test-s-deal-with-authoritarian-rodrigo-duterte-1125008963884"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.created_at",
+                    "data_type": "string",
+                    "example_values": [
+                        "2017-08-30T06:00:31Z"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.email",
+                    "data_type": "string",
+                    "example_values": [
+                        "test@test.com"
+                    ],
+                    "contains": [
+                        "email"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.id",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test Name (Trust me, I'm the real Test Name.) <test@test.com>"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.is_disabled",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.is_expired",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.is_revoked",
+                    "data_type": "boolean",
+                    "example_values": [
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.user_ids.*.name",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test Name (Trust me, I'm the real Test Name.)"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.username",
+                    "data_type": "string",
+                    "example_values": [
+                        "live:testheaddepartment"
+                    ],
+                    "contains": [
+                        "user name"
+                    ]
+                },
+                {
                     "data_path": "action_result.summary.total_results",
                     "data_type": "string",
                     "example_values": [
-                        "5"
+                        "523"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Total results: 523"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                }
+            ],
+            "render": {
+                "type": "table"
+            },
+            "versions": "EQ(*)"
+        },
+        {
+            "action": "hunt phrase",
+            "identifier": "hunt_phrase",
+            "description": "Hunt for a phrase in SocialNet",
+            "verbose": "",
+            "type": "investigate",
+            "read_only": true,
+            "parameters": {
+                "phrase": {
+                    "description": "Phrase to hunt for social network accounts",
+                    "data_type": "string",
+                    "required": true,
+                    "primary": true,
+                    "contains": [
+                        "phrase"
+                    ],
+                    "order": 0
+                },
+                "limit": {
+                    "description": "Number of query results to return (max 10000)",
+                    "data_type": "numeric",
+                    "required": false,
+                    "primary": false,
+                    "default": "25",
+                    "order": 1
+                }
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.limit",
+                    "data_type": "numeric",
+                    "contains": []
+                },
+                {
+                    "data_path": "action_result.parameter.phrase",
+                    "data_type": "string",
+                    "column_name": "phrase",
+                    "column_order": 0,
+                    "contains": [
+                        "phrase"
+                    ],
+                    "example_values": [
+                        "people who live in Test City"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.avatar_url",
+                    "data_type": "string",
+                    "column_name": "avatar url",
+                    "column_order": 6,
+                    "example_values": [
+                        "//tvax3.testimg.cn/crop.0.8.2048.2048.180/6b150f49ly8fnm1fwjon8j21kw1l5k26.jpg"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.id",
+                    "data_type": "string",
+                    "column_name": "id",
+                    "column_order": 3,
+                    "example_values": [
+                        "1796542281"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "name",
+                    "column_order": 4,
+                    "example_values": [
+                        "DEMO\u6566\u73c0"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.social_site_name",
+                    "data_type": "string",
+                    "column_name": "social site name",
+                    "column_order": 1,
+                    "example_values": [
+                        "TestSite"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.text",
+                    "data_type": "string",
+                    "example_values": [
+                        "Sample Test Text"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.title",
+                    "data_type": "string",
+                    "example_values": [
+                        "Test Title"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "column_name": "type",
+                    "column_order": 2,
+                    "example_values": [
+                        "user"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.url",
+                    "data_type": "string",
+                    "column_name": "entity url",
+                    "column_order": 5,
+                    "example_values": [
+                        "http://test.com/1796542281"
+                    ],
+                    "contains": [
+                        "url"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.total_results",
+                    "data_type": "string",
+                    "example_values": [
+                        "310"
+                    ]
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "example_values": [
+                        "Total results: 310"
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
+                    ]
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric",
+                    "example_values": [
+                        1
                     ]
                 }
             ],

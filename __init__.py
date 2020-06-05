@@ -1,7 +1,7 @@
 # --
 # File: __init__.py
 #
-# Copyright (c) Phantom Cyber Corporation, 2018-2019
+# Copyright (c) ShadowDragon, 2018-2019
 #
 # This unpublished material is proprietary to Phantom Cyber.
 # All rights reserved. The methods and
