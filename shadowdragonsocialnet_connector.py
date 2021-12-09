@@ -151,7 +151,7 @@ class ShadowdragonSocialnetConnector(BaseConnector):
         ret_val, response = self._make_rest_call('/', action_result, params=None, headers=None)
 
         if (phantom.is_fail(ret_val)):
-            self.save_progress("Test Connectivity Failed.Error: {0}".format(action_result.get_message()))
+            self.save_progress("Test Connectivity Failed. Error: {0}".format(action_result.get_message()))
             return action_result.get_status()
 
         # Return success
