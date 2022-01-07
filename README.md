@@ -10,8 +10,6 @@ Minimum Product Version: 4\.0\.1068
 
 This app supports investigative actions on the SocialNet cloud investigation API
 
-# phantom-socialnet
-
 ### Configuration Variables
 The below configuration variables are required for this Connector to operate.  These variables are specified when configuring a SocialNet asset in SOAR.
 
